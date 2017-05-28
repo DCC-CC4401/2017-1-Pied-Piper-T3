@@ -1,36 +1,42 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.conf import settings
-from .models import ConsumidorProfile, MovilProfile, FijoProfile, MyUser, Vendedor
+from .models import ConsumidorProfile, MovilProfile, FijoProfile, MyUser, Vendedor, Productos
 
 
 class MyUserForm(forms.ModelForm):
     class Meta:
         model = MyUser
-        fields = ['nombre', 'email', 'password']
+        fields = ['userType', 'nombre', 'email', 'password']
 
 
 
 class VendedorForm(forms.ModelForm):
+    avatar = forms.ImageField(required = False)
     class Meta:
         model = Vendedor
-        fields = ['efectivo', 'debito', 'credito', 'junaeb']
+        fields = ['avatar', 'efectivo', 'debito', 'credito', 'junaeb']
 
 
 class ConsumidorForm(forms.ModelForm):
+    avatar = forms.ImageField(required=False)
     class Meta:
         model = ConsumidorProfile
-        fields = ['userType']
-
+        fields = ['avatar']
 
 class MovilForm(forms.ModelForm):
     class Meta:
         model = MovilProfile
-        fields = ['userType']
+        fields = ['activo']
 
 
 class FijoForm(forms.ModelForm):
     class Meta:
         model = FijoProfile
-        fields = ['userType',  'horaIni', 'horaFin']
+        fields = ['horaIni', 'horaFin']
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Productos
+        fields = ['nombre', 'precio', 'stock', 'descripcion', 'avatar', 'foto']
 
