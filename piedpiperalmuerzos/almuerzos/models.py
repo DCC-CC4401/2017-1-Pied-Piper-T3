@@ -7,6 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
+class UserType(models.Model):
+    type = models.CharField(max_length=15)
 
 class MyUserManager(BaseUserManager):
     """
@@ -41,6 +43,7 @@ class MyUserManager(BaseUserManager):
 class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True)
     nombre = models.CharField(max_length=100)
+    userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -67,9 +70,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class UserType(models.Model):
-    type = models.CharField(max_length=15,)
-
 
 class Vendedor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -83,19 +83,16 @@ class Vendedor(models.Model):
 
 class ConsumidorProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
 
 
 class MovilProfile(models.Model):
     vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
-    userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     activo = models.BooleanField(default=False)
 
 
 class FijoProfile(models.Model):
     vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
-    userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     horaIni = models.TimeField()
     horaFin = models.TimeField()
 
@@ -118,4 +115,3 @@ class Productos(models.Model):
     vendidos = models.IntegerField(default=0)
     enVenta = models.BooleanField(default=False)
 
-#User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

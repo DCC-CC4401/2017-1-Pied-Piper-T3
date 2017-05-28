@@ -68,7 +68,7 @@ def registration(request):
             cform = FijoForm(request.POST)
             vform = VendedorForm(request.POST)
 
-        cform.userType = int(utype)
+        uform.userType = int(utype)
 
 
         if uform.is_valid() and cform.is_valid():
