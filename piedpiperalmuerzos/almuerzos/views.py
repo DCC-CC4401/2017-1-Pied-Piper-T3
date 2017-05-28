@@ -17,6 +17,10 @@ def gestion_productos(request):
     return render(request, 'almuerzos/gestion_productos.html')
 
 
+def vendedor_perfil(request):
+    return render(request, 'almuerzos/vendedor_perfil.html')
+
+
 def signup(request):
     return render(request, 'almuerzos/signup.html')
 
@@ -25,6 +29,11 @@ def login(request):
     c = {}
     c.update(csrf(request))
     return render_to_response('almuerzos/login.html', c)
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/almuerzos/')
 
 
 def auth_view(request):
@@ -41,16 +50,23 @@ def auth_view(request):
 
 def registration(request):
     if request.method == "POST":
-        uform = MyUserForm(request.POST)
         utype = request.POST.get('userType')
+        if utype == None:
+            return redirect('/almuerzos/signup/')
+
+        uform = MyUserForm(request.POST)
+
+        vform = None
         if utype == "3":
             cform = ConsumidorForm(request.POST)
 
         elif utype == "2":
             cform = MovilForm(request.POST)
+            vform = VendedorForm(request.POST)
 
         elif utype == "1":
             cform = FijoForm(request.POST)
+            vform = VendedorForm(request.POST)
 
         cform.userType = int(utype)
 
@@ -59,9 +75,27 @@ def registration(request):
             user = uform.save()
             user.set_password(user.password)
             user.save()
+            if utype in ["1", "2"]:
+                if vform.is_valid():
+                    vendedor = vform.save(commit = False)
+                    vendedor.user = user
+                    vendedor.save()
+                    profile = cform.save(commit = False)
+                    profile.vendedor = vendedor
+                    profile.save()
+                    new_user = auth.authenticate(username = uform.cleaned_data['email'],
+                                                 password=uform.cleaned_data['password'])
+                    auth.login(request, new_user)
+                    return redirect('/almuerzos/')
+                else :
+                    return redirect('/almuerzos/signup/')
+
             profile = cform.save(commit = False)
             profile.user = user
             profile.save()
+            new_user = auth.authenticate(username=uform.cleaned_data['email'],
+                                         password=uform.cleaned_data['password'])
+            auth.login(request, new_user)
             return redirect('/almuerzos/')
         else:
             return redirect('/almuerzos/signup/')
@@ -72,6 +106,3 @@ def registration(request):
 
 
 
-
-def vendedor_perfil(request):
-    return render(request, 'almuerzos/vendedor_perfil.html')

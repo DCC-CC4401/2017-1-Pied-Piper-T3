@@ -40,6 +40,7 @@ class MyUserManager(BaseUserManager):
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True)
+    nombre = models.CharField(max_length=100)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -66,59 +67,55 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class Productos(models.Model):
-    userId = models.OneToOneField(settings.AUTH_USER_MODEL)
-    nombre = models.CharField(max_length=100)
-    descripcion = models.CharField(max_length=120)
-    categoria = models.CharField(max_length=100)
-    stock = models.IntegerField(default = 0)
-    precio = models.IntegerField(default = 0)
-    avatar = models.ImageField(default='almuerzos/static/img/bread.png')
-    foto = models.ImageField(upload_to='almuerzos/productos/', default='almuerzos/static/img/background4.png')
-    enVenta = models.BooleanField(default=False)
-
-
 class UserType(models.Model):
-    type = models.CharField(max_length=15)
+    type = models.CharField(max_length=15,)
 
+
+class Vendedor(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    favoritos = models.IntegerField(default=0)
+    avatar = models.ImageField(default='almuerzos/static/img/AvatarVendedor1.png')
+    efectivo = models.BooleanField()
+    debito = models.BooleanField()
+    credito = models.BooleanField()
+    junaeb = models.BooleanField()
 
 
 class ConsumidorProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    nombre = models.CharField(max_length=100)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
 
 
 class MovilProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    nombre = models.CharField(max_length=100)
+    vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
     userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
-    efectivo = models.BooleanField()
-    debito = models.BooleanField()
-    credito = models.BooleanField()
-    junaeb = models.BooleanField()
     activo = models.BooleanField(default=False)
-    favoritos = models.IntegerField(default=0)
 
 
 class FijoProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    nombre = models.CharField(max_length=100)
+    vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
     userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
-    efectivo = models.BooleanField()
-    debito = models.BooleanField()
-    credito = models.BooleanField()
-    junaeb = models.BooleanField()
-    activo = models.BooleanField(default=False)
-    favoritos = models.IntegerField(default=0)
     horaIni = models.TimeField()
     horaFin = models.TimeField()
 
 
+class Favorito(models.Model):
+    consumidor = models.ForeignKey(ConsumidorProfile, on_delete=models.CASCADE)
+    vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
 
 
+class Productos(models.Model):
+    vendedor = models.OneToOneField(Vendedor)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=200)
+    categoria = models.CharField(max_length=100)
+    stock = models.IntegerField(default = 0)
+    precio = models.IntegerField(default = 0)
+    avatar = models.ImageField(default='almuerzos/static/img/bread.png')
+    foto = models.ImageField(upload_to='almuerzos/productos/', default='almuerzos/static/img/background4.png')
+    #Vendidos sirve para las estadisticas
+    vendidos = models.IntegerField(default=0)
+    enVenta = models.BooleanField(default=False)
 
 #User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
