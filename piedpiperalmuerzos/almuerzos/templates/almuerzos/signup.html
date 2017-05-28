@@ -37,21 +37,21 @@
 
 <script id="time_input_html" type="text/template">
     <div class="row">
-        <form class="col s12">
+
             <div class="row">
                 <h6 class="col s3 center-align">apertura</h6>
                 <div class="input-field col s3">
                     <i class="material-icons prefix">alarm</i>
-                    <input id="horaIni" type="time" class="validate">
+                    <input id="horaIni" name="horaIni" type="time" class="validate">
                 </div>
 
                 <h6 class="col s3 center-align">cierre</h6>
                 <div class="input-field col s3">
                     <i class="material-icons prefix">alarm</i>
-                    <input id="horaFin" type="time" class="validate">
+                    <input id="horaFin" name="horaFin" type="time" class="validate">
                 </div>
             </div>
-        </form>
+
     </div>
 </script>
 
@@ -59,24 +59,24 @@
     <div class='row'>
         <div class='input-field col s12 m12'>
             Seleccione sus formas de pago:
-            <form action="#">
+
                 <p>
-                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                    <input type="checkbox" class="filled-in" id="filled-in-box" name="efectivo" checked="checked" />
                     <label for="filled-in-box">Efectivo</label>
                 </p>
                 <p>
-                    <input type="checkbox" class="filled-in" id="filled-in-box2" checked="checked" />
+                    <input type="checkbox" class="filled-in" id="filled-in-box2" name="credito" checked="checked" />
                     <label for="filled-in-box2">Tarjeta de Crédito</label>
                 </p>
                 <p>
-                    <input type="checkbox" class="filled-in" id="filled-in-box3" checked="checked" />
+                    <input type="checkbox" class="filled-in" id="filled-in-box3" name="debito" checked="checked" />
                     <label for="filled-in-box3">Tarjeta de Débito</label>
                 </p>
                 <p>
-                    <input type="checkbox" class="filled-in" id="filled-in-box4" checked="checked" />
+                    <input type="checkbox" class="filled-in" id="filled-in-box4" name="junaeb" checked="checked" />
                     <label for="filled-in-box4">Tarjeta Junaeb</label>
                 </p>
-            </form>
+
         </div>
     </div>
 </script>
@@ -117,14 +117,14 @@
 
         <div class="z-depth-1 grey lighten-4 row" style="margin-left: 5%; margin-right: 5%; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
 
-            <form class="col s12 m12" method="post">
+            <form class="col s12 m12" method="post" action="/almuerzos/registration/">{% csrf_token %}
 
                 <div class="input-field col s12 m12">
-                    <select id="userType">
-                        <option value=0 disabled selected>Elige una opción</option>
-                        <option value=1>Vendedor fijo</option>
-                        <option value=2>Vendedor móvil</option>
-                        <option value=3>Cliente</option>
+                    <select id="userType" name="userType">
+                        <option value='0' disabled selected>Elige una opción</option>
+                        <option value='1'>Vendedor fijo</option>
+                        <option value='2'>Vendedor móvil</option>
+                        <option value='3'>Cliente</option>
                     </select>
                     <label>Tipo de Usuario</label>
                 </div>

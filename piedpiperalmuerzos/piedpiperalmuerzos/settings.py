@@ -121,3 +121,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'almuerzos.MyUser'
+AUTHENTICATION_BACKENDS = ('almuerzos.backends.MyUserAuth',)
