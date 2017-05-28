@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^gestion_productos/$', views.gestion_productos, name = 'gestion_productos'),
     url(r'^vendedor_perfil/$', views.vendedor_perfil, name = 'vendedor_perfil'),
     url(r'^auth/$', views.auth_view, name = 'autenticacion'),
+    url(r'^registration/$', views.registration, name = 'registration'),
 ]
