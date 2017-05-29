@@ -14,7 +14,27 @@ def base(request):
 
 
 def gestion_productos(request):
-    return render(request, 'almuerzos/gestion_productos.html')
+    if request.method == "POST":
+        pname = request.POST.get('nombre')
+        if pname == None:
+            return redirect('/almuerzos/gestion_productos/')
+        pprice = request.POST.get('precio')
+        if pprice == None:
+            return redirect('/almuerzos/gestion_productos/')
+        pstock = request.POST.get('stock')
+        if pstock == None:
+            return redirect('/almuerzos/gestion_productos/')
+        pavatar = request.POST.get('avatar')
+        if pavatar == None:
+            return redirect('/almuerzos/gestion_productos/')
+        pphoto = request.POST.get('foto')
+
+        #estoy cachando aun como recuperarel usuario que este conectado desde el html de gestion_productos
+        prod=Productos(vendedor=None,nombre=pname,precio=pprice,stock=pstock,avatar=pavatar,foto=pphoto)
+        prod.save()
+        return redirect('/vendedor_perfil/')
+    else:
+        return render(request, 'almuerzos/gestion_productos.html')
 
 
 def vendedor_perfil(request):

@@ -121,8 +121,8 @@ class Favorito(models.Model):
 class Productos(models.Model):
     vendedor = models.OneToOneField(Vendedor)
     nombre = models.CharField(max_length=100)
-    descripcion = models.CharField(max_length=200)
-    categoria = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=200, default="")
+    categoria = models.CharField(max_length=100, default="")
     stock = models.IntegerField(default = 0)
     precio = models.IntegerField(default = 0)
     avatar = models.ImageField(default='almuerzos/static/img/bread.png')
