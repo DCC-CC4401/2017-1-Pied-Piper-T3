@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^vendedor_perfil/$', views.vendedor_perfil, name = 'vendedor_perfil'),
     url(r'^auth/$', views.auth_view, name = 'autenticacion'),
     url(r'^registration/$', views.registration, name = 'registration'),
+    url(r'^edit/$', views.edit, name = 'edit')
 ]

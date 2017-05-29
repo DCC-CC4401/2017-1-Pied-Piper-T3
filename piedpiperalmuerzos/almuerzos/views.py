@@ -30,6 +30,8 @@ def login(request):
     c.update(csrf(request))
     return render_to_response('almuerzos/login.html', c)
 
+def edit(request):
+    return render(request, 'almuerzos/edit.html')
 
 def logout(request):
     auth.logout(request)

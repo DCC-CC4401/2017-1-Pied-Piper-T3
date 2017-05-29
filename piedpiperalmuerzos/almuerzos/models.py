@@ -64,12 +64,28 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_full_name(self):
-        return self.email
+        return self.nombre
 
     def get_short_name(self):
+        return self.nombre
+
+    def get_email(self):
         return self.email
 
+    def get_user_type(self):
+        return self.userType.id
 
+    def is_consumidor(self):
+        return self.get_user_type() == 3
+
+    def is_movil(self):
+        return self.get_user_type() == 2
+
+    def is_fijo(self):
+        return self.get_user_type() == 1
+
+    def is_vendedor(self):
+        return self.is_movil() or self.is_fijo()
 
 class Vendedor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

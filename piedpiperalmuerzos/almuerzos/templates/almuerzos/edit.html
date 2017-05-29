@@ -4,7 +4,6 @@
   <main>
       <div class="section"></div>
 
-      <h5 class="teal-text" style="text-align: center;">¡Regístrate!</h5>
       <div class="section"></div>
 
       <div class="container">
@@ -18,26 +17,31 @@
 
 
               <div class='input-field col s12 m12'>
-                <input class='validate' type='email' name='email' id='email' />
-                <label style="text-align: center" for='email'>Ingresa tu e-mail</label>
+                <input class='validate' type='text' name='nombre' id='nombre' />
+                <label style="text-align: center" for='nombre'>Nuevo nombre</label>
+              </div>
+
+            {% if request.user.is_fijo %}
+            <div>
+              <div class="col s6 center-align">
+                Nueva hora apertura
+              </div>
+              <div class="col s6 center-align">
+                Nueva hora cierre
               </div>
             </div>
 
-              <div class="row">
-                  <div class="row">
-                    <div class="input-field col s6">
-                      <i class="material-icons prefix">alarm</i>
-                      <input id="icon_prefix" type="text" class="validate">
-                      <label for="icon_prefix">Hora inicial</label>
-                    </div>
-                    <div class="input-field col s6">
-                      <i class="material-icons prefix">alarm</i>
-                      <input id="icon_telephone" type="tel" class="validate">
-                      <label for="icon_telephone">Hora final</label>
-                    </div>
-                  </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <i class="material-icons prefix">alarm</i>
+                <input id="horaIni" name="horaIni" type="time" class="validate">
               </div>
-
+              <div class="input-field col s6">
+                <i class="material-icons prefix">alarm</i>
+                <input id="horaFin" name="horaFin" type="time" class="validate">
+              </div>
+            </div>
+            {% endif %}
 
             <div class='row'>
               <div class='input-field col s12 m12'>
@@ -75,20 +79,6 @@
                   <input class="with-gap" name="avatar" type="radio" id="test4" />
                   <label for="test4"><img style="max-width: 50px;" src="../../static/img/AvatarVendedor4.png"></label>
                 </div>
-
-            <div class='row'>
-              <div class='input-field col s12 m12'>
-                <input class='validate' type='password' name='password' id='password' />
-                <label style="text-align: center" for='password'>Ingresa tu contraseña</label>
-              </div>
-            </div>
-
-            <div class='row'>
-              <div class='input-field col s12 m12'>
-                <input class='validate' type='password' name='password2' id='password2' />
-                <label style="text-align: center" for='password2'>Repite tu contraseña</label>
-              </div>
-            </div>
 
               <div class='row'>
                 <button type='submit' name='btn_login' class='col l6 offset-l3 btn btn-large waves-effect teal'>Confirmar</button>
