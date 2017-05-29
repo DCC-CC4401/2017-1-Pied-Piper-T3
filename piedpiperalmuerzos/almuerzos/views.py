@@ -30,7 +30,8 @@ def gestion_productos(request):
         pphoto = request.POST.get('foto')
 
         #estoy cachando aun como recuperarel usuario que este conectado desde el html de gestion_productos
-        prod=Productos(vendedor=None,nombre=pname,precio=pprice,stock=pstock,avatar=pavatar,foto=pphoto)
+        prod=Productos(vendedor=None,nombre=pname,precio=pprice,
+                       stock=pstock,avatar=pavatar,foto=pphoto)
         prod.save()
         return redirect('/vendedor_perfil/')
     else:
