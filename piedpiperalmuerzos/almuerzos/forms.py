@@ -38,5 +38,5 @@ class FijoForm(forms.ModelForm):
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Productos
-        fields = ['nombre', 'precio', 'stock', 'descripcion', 'avatar', 'foto']
+        fields = ['nombre', 'precio', 'stock', 'categoria', 'descripcion', 'avatar', 'foto']
 

@@ -79,7 +79,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def get_user_type(self):
         return self.userType.id
 
-    def vendedor(self):
+    def get_vendedor(self):
         return Vendedor.objects.get(user=self)
 
     def consumidor(self):
@@ -98,12 +98,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.is_movil() or self.is_fijo()
 
     def get_avatar(self):
-        return self.vendedor().avatar if self.is_vendedor() else self.consumidor().avatar
+        return self.get_vendedor().avatar if self.is_vendedor() else self.consumidor().avatar
 
 class Vendedor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     favoritos = models.IntegerField(default=0)
-    avatar = models.ImageField(default='almuerzos/static/img/AvatarVendedor1.png')
+    avatar = models.ImageField(default='AvatarVendedor1.png')
     efectivo = models.BooleanField()
     debito = models.BooleanField()
     credito = models.BooleanField()
@@ -134,7 +134,7 @@ class Vendedor(models.Model):
 
 class ConsumidorProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
+    avatar = models.ImageField(default='AvatarEstudiante.png')
 
     def __str__(self):
         return self.user.__str__()
@@ -172,8 +172,8 @@ class Productos(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     stock = models.IntegerField(default = 0)
     precio = models.IntegerField(default = 0)
-    avatar = models.ImageField(default='almuerzos/static/img/bread.png')
-    foto = models.ImageField(upload_to='almuerzos/productos/', default='almuerzos/static/img/background4.png')
+    avatar = models.ImageField(default='bread.png')
+    foto = models.ImageField(default='background4.png')
     #Vendidos sirve para las estadisticas
     vendidos = models.IntegerField(default=0)
     enVenta = models.BooleanField(default=False)

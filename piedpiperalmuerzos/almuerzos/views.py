@@ -4,6 +4,8 @@ from django.contrib import auth
 from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from .forms import *
+from .models import *
+from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse
 
@@ -21,19 +23,20 @@ def index(request):
         if user.userType.id == 2:
             c = MovilProfile.objects.get(vendedor_id=v.id)
             activo = c.activo
-            return render_to_response('almuerzos/vendedor_perfil.html', {'user' : user, 'vendedor' : v, 'activo' : activo, 'productos' : p})
+            return render_to_response('almuerzos/vendedor_perfil.html', {'user' : user, 'vendedor' : v, 'activo' : user.get_vendedor().is_active_now(), 'productos' : p})
         if user.userType.id == 1:
-            return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'vendedor' : v, 'activo': activo, 'productos' : p})
+            return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'vendedor' : v, 'activo': user.get_vendedor().is_active_now(), 'productos' : p})
     return render_to_response('almuerzos/index.html', {'user' : user, 'activo' : activo })
 
 
 def base(request):
-
     return render(request, 'almuerzos/base.html')
 
 
+@login_required
 def gestion_productos(request):
-    return render(request, 'almuerzos/gestion_productos.html')
+    categorias = Categoria.objects.all()
+    return render(request, 'almuerzos/gestion_productos.html', {'categorias' : categorias})
 
 
 def vendedor_perfil(request, vendedor_id = 1):
@@ -163,17 +166,28 @@ def edit_auth(request):
             v = Vendedor.objects.get(user_id = user.id)
             if request.POST.get('efectivo') != None:
                 v.efectivo = True
+            else:
+                v.efectivo = False
 
             if request.POST.get('debito') != None:
                 v.debito = True
+            else:
+                v.debito = False
 
             if request.POST.get('credito') != None:
                 v.credito = True
+            else:
+                v.credito = False
 
             if request.POST.get('junaeb') != None:
                 v.junaeb = True
+            else:
+                v.junaeb = False
 
-            v.save(update_fields=['efectivo', 'debito', 'credito', 'junaeb'])
+            if request.POST.get('avatar') != None:
+                v.avatar = request.POST.get('avatar')
+
+            v.save(update_fields=['efectivo', 'debito', 'credito', 'junaeb', 'avatar'])
 
         elif utype == 1:
             v = Vendedor.objects.get(user_id = user.id)
@@ -212,7 +226,7 @@ def edit_auth(request):
 
             c.save(update_fields=['horaIni', 'horaFin'])
 
-            return redirect('/almuerzos/vendedor_perfil/')
+        return redirect('/almuerzos/')
 
 
 def ajaxActive(request):
@@ -241,12 +255,48 @@ def addItem_auth(request):
     if request.method == 'POST':
         user = request.user
         vendedor = Vendedor.objects.get(user_id = user.id)
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, request.FILES)
+        print(form.is_valid())
         if form.is_valid():
+            avatar = request.POST.get('avatar')
+            categid = request.POST.get('categoria')
+            categid = int(categid)
             profile = form.save(commit = False)
             profile.vendedor = vendedor
+            profile.avatar = avatar
+            profile.categoria = Categoria.objects.get(id=categid)
             profile.save()
-            return redirect('/almuerzos/index/')
+            return redirect('/almuerzos/')
+        else:
+            return redirect ('/almuerzos/gestion_productos')
+    else:
+        return redirect ('almuerzos/gestion_productos')
+
+
+
+@login_required
+def edit_prod(request, producto_id=1):
+    categorias = Categoria.objects.all()
+    return render(request, 'almuerzos/gestion_productos.html', {'categorias' : categorias})
+
+
+@login_required
+def edit_prod_auth(request):
+    if request.method == 'POST':
+        user = request.user
+        vendedor = Vendedor.objects.get(user_id = user.id)
+        form = ProductoForm(request.POST, request.FILES)
+        print(form.is_valid())
+        if form.is_valid():
+            avatar = request.POST.get('avatar')
+            categid = request.POST.get('categoria')
+            categid = int(categid)
+            profile = form.save(commit = False)
+            profile.vendedor = vendedor
+            profile.avatar = avatar
+            profile.categoria = Categoria.objects.get(id=categid)
+            profile.save()
+            return redirect('/almuerzos/')
         else:
             return redirect ('/almuerzos/gestion_productos')
     else:
