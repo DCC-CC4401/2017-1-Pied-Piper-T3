@@ -137,7 +137,7 @@ class Categoria(models.Model):
     categoria = models.CharField(max_length=40)
 
 class Productos(models.Model):
-    vendedor = models.OneToOneField(Vendedor)
+    vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
