@@ -116,10 +116,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'piedpiperalmuerzos/media  ')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..')
+SITE_ROOT = PROJECT_ROOT
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 AUTH_USER_MODEL = 'almuerzos.MyUser'
 AUTHENTICATION_BACKENDS = ('almuerzos.backends.MyUserAuth',)

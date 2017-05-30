@@ -36,7 +36,8 @@ class FijoForm(forms.ModelForm):
         fields = ['horaIni', 'horaFin']
 
 class ProductoForm(forms.ModelForm):
+    foto = forms.ImageField()
     class Meta:
         model = Productos
-        fields = ['nombre', 'precio', 'stock', 'descripcion', 'avatar', 'foto']
+        fields = ['nombre', 'precio', 'stock', 'categoria', 'descripcion', 'avatar', 'foto']
 
