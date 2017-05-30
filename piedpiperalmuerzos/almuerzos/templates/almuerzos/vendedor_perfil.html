@@ -173,11 +173,14 @@
                                                     <li>Stock: {{producto.stock}} </li>
                                                     <!--<small class="btn-floating btn-small waves-effect waves-light red accent-2"><i class="material-icons tiny">add</i></small>-->
                                                     <br>
-                                                    {% if producto.foto != 'background4.png' %}
                                                         <li>Descripción: {{producto.descripcion}}
+                                                            {% if producto.foto != 'background4.png' %}
                                                             <p class="right-align"><a class="waves-effect waves-light" href="#modal1">Ver imagen</a></p>
+                                                            {% endif %}
+                                                            {% if user.id == vendedor.user.id %}
+                                                            <p class="right-align"><a class="waves-effect waves-light" href="edit_prod/{{producto.id}}">Editar</a></p>
+                                                            {% endif %}
                                                         </li>
-                                                    {% endif %}
                                                 </ul>
                                             </div>
                                         </div>
