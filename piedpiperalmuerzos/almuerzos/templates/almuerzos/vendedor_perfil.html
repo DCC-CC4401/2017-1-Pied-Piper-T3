@@ -16,30 +16,48 @@
             </div>
             <div class="row hide-on-small-and-down">
                 <a class="card-profile-image-large">
-                    <img style="margin-top: 20%;" src="../../static/img/AvatarVendedor6.png" alt="profile image" class="circle z-depth-2 responsive-img activator">
+                    <img style="margin-top: 20%;" src="/static/img/{{vendedor.avatar}}" alt="profile image" class="circle z-depth-2 responsive-img activator">
                 </a>
             </div>
             <div class="row show-on-small hide-on-med-and-up">
                 <a class="card-profile-image-small">
-                    <img src="../../static/img/AvatarVendedor6.png" alt="profile image" class="circle z-depth-2 responsive-img activator">
+                    <img src="/static/img/{{vendedor.avatar}}" alt="profile image" class="circle z-depth-2 responsive-img activator">
                 </a>
             </div>
             <div class="card-content s12">
                 <div class="row">
                     <div class="col s3 offset-s2 hide-on-med-and-down">
-                        <h4 class="card-title grey-text flow-text text-darken-4">Yolanda Martinez</h4>
-                        <p class="medium-small flow-text grey-text">&emsp;&emsp;&ensp;Vendedor Fijo</p>
-                        <p class="flow-text text-darken-4" style="font-size: 0.88rem;">
-                            &emsp;&emsp;Horario: <a class="light-green-text">12:30-14:15</a>
-                        </p>
+                        <h4 class="center-align card-title grey-text flow-text text-darken-4">{{vendedor.user.get_full_name}}</h4>
+                        <p class=" center-align medium-small flow-text grey-text">Vendedor {% if vendedor.is_movil %}Movil{% else %}Fijo{% endif %}</p>
+                        {% if vendedor.is_fijo %}
+                            <p class="center-align flow-text text-darken-4" style="font-size: 0.88rem;">
+                                Horario: <a class="light-green-text">{{vendedor.horas}}</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                    <div class="col s3 l2 hide-on-med-and-down center-align" {% if user.id == vendedor.user.id %}id="estado"{% endif %}>
+                        <h4 class="card-title flow-text text-darken-4">Estado</h4>
+                        {% if activo %}
+                            <p class="medium-small flow-text light-green-text">Disponible</p>
+                        {% else %}
+                            <p class="medium-small flow-text red-text">No Disponible</p>
+                        {% endif %}
                     </div>
                     <div class="col s3 l2 hide-on-med-and-down center-align">
-                         <h4 class="card-title flow-text text-darken-4">Estado</h4>
-                        <p class="medium-small flow-text light-green-text">Disponible</p>
-                    </div>
-                    <div class="col s3 l2 hide-on-med-and-down center-align">
-                        <h8 class=" grey-text flow-text text-darken-4" style="font-size: 1.3rem;">Formas de pago</h8>
-                        <p class="medium-small flow-text grey-text">Efectivo</p>
+                        <h4 class="card-title flow-text text-darken-4"></h4>
+                        <h8 class=" grey-text flow-text text-darken-4 " style="font-size: 1.3rem;">Formas de pago</h8>
+                        {% if vendedor.efectivo %}
+                        <p class="medium-small flow-text grey-text ">Efectivo</p>
+                        {% endif %}
+                        {% if vendedor.credito %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta de Crédito</p>
+                        {% endif %}
+                        {% if vendedor.debito %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta de Débito</p>
+                        {% endif %}
+                        {% if vendedor.junaeb %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta Junaeb</p>
+                        {% endif %}
                     </div>
                     <div class="col s3 l2 hide-on-med-and-down center-align">
                         <div class="switch" style="margin-left: 10px;">
@@ -47,7 +65,7 @@
                                 <h4 class="card-title grey-text flow-text text-darken-4">Favorito</h4>
                                 <!--<input type="checkbox"><span class="lever"></span>-->
                                 <h6><i class="material-icons amber-text" >grade</i>
-                                    <span class=" grey-text flow-text text-darken-4"style="font-size:24px; line-height:35px;">42</span>
+                                    <span class=" grey-text flow-text text-darken-4"style="font-size:24px; line-height:35px;">{{vendedor.favoritos}}</span>
                                 </h6>
                             </label>
                         </div>
@@ -63,29 +81,46 @@
 
             <div class="row show-on-medium-and-down hide-on-med-and-up">
                 <div class="col s4 offset-s2">
-                        <h4 class="card-title grey-text flow-text text-darken-4">Yolanda Martinez</h4>
-                        <p class="medium-small flow-text grey-text">&ensp;Vendedor Fijo</p>
-                        <p class="flow-text text-darken-4" style="font-size: 0.88rem;">
-                            &ensp;Horario: <a class="light-green-text">12:30-14:15</a>
-                        </p>
-                        <div class="switch" style="margin-left: 10px;">
+                        <h4 class="card-title grey-text flow-text text-darken-4 center-align">{{vendedor.user.get_full_name}}</h4>
+                        <p class="medium-small flow-text grey-text center-align">&ensp;Vendedor {% if vendedor.is_movil %}Movil{% else %}Fijo{% endif %}</p>
+                        {% if vendedor.is_fijo %}
+                            <p class="flow-text text-darken-4 center-align" style="font-size: 0.88rem;">
+                                <a class="light-green-text">{{vendedor.horas}}</a>
+                            </p>
+                        {% endif %}
+                        <div class="switch center-align" style="margin-left: 10px;">
                             <label>
-                                <p class="card-title grey-text flow-text text-darken-4" style="font-size: 1.3rem;">Favorito</p>
+                                <p class="card-title grey-text flow-text text-darken-4 center-align" style="font-size: 1.3rem;">Favorito</p>
                                 <!--<input type="checkbox"><span class="lever"></span>-->
-                                <h6><i class="material-icons amber-text">grade</i>
-                                    <span class=" grey-text flow-text text-darken-4"style="font-size:22px; line-height:25px;">42</span>
+                                <h6><i class="material-icons amber-text center-align">grade</i>
+                                    <span class=" grey-text flow-text text-darken-4 center-align"style="font-size:22px; line-height:25px;">{{vendedor.favoritos}}</span>
                                 </h6>
                             </label>
                         </div>
                     </div>
-                <div class="col s3 m2 l12 offset-s1">
-                    <p class="flow-text text-darken-4">Estado</p>
-                    <p class="medium-small flow-text light-green-text">Disponible</p>
+                <div class="col s3 m2 l12 offset-s1" {% if user.id == vendedor.user.id %}id="estadochico"{% endif %}>
+                    <p class=" flow-text text-darken-4">Estado</p>
+                    {% if activo %}
+                            <p class="medium-small flow-text light-green-text">Disponible</p>
+                        {% else %}
+                            <p class="medium-small flow-text red-text">No Disponible</p>
+                        {% endif %}
                 </div>
 
                 <div class="col s3 m2 l12 offset-s1"> <!--offset-s2-->
                     <p class=" grey-text flow-text text-darken-4" style="font-size: 1.3rem;">Formas de pago</p>
-                    <p class="medium-small flow-text grey-text">Efectivo</p>
+                    {% if vendedor.efectivo %}
+                        <p class="medium-small flow-text grey-text ">Efectivo</p>
+                        {% endif %}
+                        {% if vendedor.credito %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta de Crédito</p>
+                        {% endif %}
+                        {% if vendedor.debito %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta de Débito</p>
+                        {% endif %}
+                        {% if vendedor.junaeb %}
+                        <p class="medium-small flow-text grey-text ">Tarjeta Junaeb</p>
+                        {% endif %}
                 </div>
 
                 <!--<div class="col s3 offset-s2 offset-l10">
@@ -111,35 +146,19 @@
                     <div class="container">
                         <div class="section">
                             <div class="row">
-
-                                <div class="col s6 m6 l4">
+                                {% for producto in productos %}
+                                    <div class="col s6 m6 l4">
                                     <div class="container">
                                         <div class="card z-depth-1">
                                             <div class="teal lighten-2 card-image waves-effect waves-block waves-light">
-                                              <img class="activator responsive-img center-block"  style="max-width: 30%; margin-top:20px; margin-bottom:20px;" src="../../static/img/pizza.png">
+                                              <img class="activator responsive-img center-block"  style="max-width: 30%; margin-top:20px; margin-bottom:20px;" src="/static/img/{{producto.avatar}}">
                                             </div>
                                             <div class="card-content">
-                                              <span class="card-title activator grey-text text-darken-4">Pizza<i class="material-icons right">more_vert</i></span>
-                                              <p><a class="teal-text">$1.300</a></p>
+                                              <span class="card-title activator grey-text text-darken-4">{{producto.nombre}}<i class="material-icons right">more_vert</i></span>
+                                              <p><a class="teal-text">${{producto.precio}}</a></p>
                                                 <div id="modal1" class="modal">
                                                     <div class="modal-content">
-                                                      <img class="activator responsive-img center-block" src="../../static/img/pepperoni1.jpg">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="large material-icons">close</i></a>
-                                                    </div>
-                                                </div>
-                                                <div id="modal2" class="modal">
-                                                    <div class="modal-content">
-                                                      <img class="activator responsive-img center-block" src="../../static/img/pollo1.jpg">
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="large material-icons">close</i></a>
-                                                    </div>
-                                                </div>
-                                                <div id="modal3" class="modal">
-                                                    <div class="modal-content">
-                                                      <img class="activator responsive-img center-block" src="../../static/img/jugo1.jpg">
+                                                      <img class="activator responsive-img center-block" src="/media/{{producto.foto}}">
                                                     </div>
                                                     <div class="modal-footer">
                                                       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"><i class="large material-icons">close</i></a>
@@ -147,78 +166,24 @@
                                                 </div>
                                             </div>
                                             <div class="card-reveal">
-                                              <span class="card-title grey-text text-darken-4">Pizza<i class="material-icons right">close</i></span>
+                                              <span class="card-title grey-text text-darken-4">{{producto.nombre}}<i class="material-icons right">close</i></span>
                                                 <ul>
-                                                    <li>Precio: <a class="green-text light-green-text">$1.300</a></li>
-                                                    <li>Categoria: Almuerzos</li>
-                                                    <li>Stock: 20 </li>
+                                                    <li>Precio: <a class="green-text light-green-text">${{producto.precio}}</a></li>
+                                                    <li>Categoria: {{producto.categoria.categoria}}</li>
+                                                    <li>Stock: {{producto.stock}} </li>
                                                     <!--<small class="btn-floating btn-small waves-effect waves-light red accent-2"><i class="material-icons tiny">add</i></small>-->
                                                     <br>
-                                                    <li>Descripción: Deliciosa pizza hecha con masa casera, viene disponible en 3 tipos:
-                                                        <p>-Peperoni: Queso mozzarella, Pepperoni</p>
-                                                        <p class="right-align"><a class="waves-effect waves-light" href="#modal1">Ver imagen</a></p>
-                                                        <p>-Clásica: Queso mozzarella, Aceitunas, Jamon, Tomate</p>
-                                                        <p class="right-align"><a class="waves-effect waves-light" href="#modal1">Ver imagen</a></p>
-                                                        <p>-Vegetariana: Queso mozzarella, Aceitunas, Champiñones, Tomate</p>
-                                                        <p class="right-align"><a class="waves-effect waves-light" href="#modal1">Ver imagen</a></p>
-                                                    </li>
-
+                                                    {% if producto.foto != '' %}
+                                                        <li>Descripción: {{producto.descripcion}}
+                                                            <p class="right-align"><a class="waves-effect waves-light" href="#modal1">Ver imagen</a></p>
+                                                        </li>
+                                                    {% endif %}
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col s6 m6 l4">
-                                    <div class="container">
-                                        <div class="card z-depth-1">
-                                            <div class="teal lighten-2 card-image waves-effect waves-block waves-light">
-                                              <img class="activator responsive-img center-block"  style="max-width: 30%; margin-top:20px; margin-bottom:20px;" src="../../static/img/rice.png">
-                                            </div>
-                                            <div class="card-content">
-                                              <span class="card-title activator grey-text text-darken-4">Menú de arroz<i class="material-icons right">more_vert</i></span>
-                                              <p><a class="teal-text">$2.500</a></p>
-                                            </div>
-                                            <div class="card-reveal">
-                                              <span class="card-title grey-text text-darken-4">Menú de arroz<i class="material-icons right">close</i></span>
-                                              <ul>
-                                                <li>Precio: <a class="green-text light-green-text">$2.500</a></li>
-                                                <li>Categoria: Almuerzos</li>
-                                                <li>Stock: 40</li>
-                                                <li>Descripción: Almuerzo de arroz con pollo arvejado.
-                                                    <p class="right-align"><a class="waves-effect waves-light" href="#modal2">Ver imagen</a></p>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col s6 m6 l4">
-                                    <div class="container">
-                                        <div class="card z-depth-1">
-                                            <div class="teal lighten-2 card-image waves-effect waves-block waves-light">
-                                              <img class="activator responsive-img center-block"  style="max-width: 30%; margin-top:20px; margin-bottom:20px;" src="../../static/img/juice.png">
-                                            </div>
-                                            <div class="card-content">
-                                              <span class="card-title activator grey-text text-darken-4">Jugo<i class="material-icons right">more_vert</i></span>
-                                              <p><a class="teal-text">$300</a></p>
-                                            </div>
-                                            <div class="card-reveal">
-                                              <span class="card-title grey-text text-darken-4">Jugo<i class="material-icons right">close</i></span>
-                                              <ul>
-                                                <li>Precio: <a class="green-text light-green-text">$300</a></li>
-                                                <li>Categoria: Snack</li>
-                                                <li>Stock: 40</li>
-                                                <li>Descripción: Jugo en caja sabor durazno.
-                                                    <p class="right-align"><a class="waves-effect waves-light" href="#modal3">Ver imagen</a></p>
-                                                </li>
-                                              </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                {% endfor %}
                             </div>
                         </div>
 

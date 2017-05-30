@@ -49,6 +49,9 @@ def vendedor_perfil(request, vendedor_id = 1):
     if userType == 2:
         c = MovilProfile.objects.get(vendedor_id=v.id)
         activo = c.activo
+    elif userType == 1:
+        activo = v.is_active_now()
+
     return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'activo' : activo, 'vendedor' : Vendedor.objects.get(id=vendedor_id), 'productos' : p})
 
 

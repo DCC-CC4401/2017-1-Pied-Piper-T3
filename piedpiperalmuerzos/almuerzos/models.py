@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+import datetime
 
 
 class UserType(models.Model):
@@ -78,6 +79,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def get_user_type(self):
         return self.userType.id
 
+    def vendedor(self):
+        return Vendedor.objects.get(user=self)
+
+    def consumidor(self):
+        return ConsumidorProfile.objects.get(user=self)
+
     def is_consumidor(self):
         return self.get_user_type() == 3
 
@@ -90,6 +97,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def is_vendedor(self):
         return self.is_movil() or self.is_fijo()
 
+    def get_avatar(self):
+        return self.vendedor().avatar if self.is_vendedor() else self.consumidor().avatar
+
 class Vendedor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     favoritos = models.IntegerField(default=0)
@@ -101,6 +111,25 @@ class Vendedor(models.Model):
 
     def __str__(self):
         return self.user.__str__()
+
+    def is_fijo(self):
+        return self.user.is_fijo()
+
+    def is_movil(self):
+        return self.user.is_movil()
+
+    def horas(self):
+        f = '%H:%M %p'
+        return '{} - {}'.format(self.fijo().horaIni.strftime(f), self.fijo().horaFin.strftime(f)) if self.is_fijo() else ''
+
+    def is_active_now(self):
+        return self.fijo().horaIni < datetime.datetime.now().time() < self.fijo().horaFin if self.is_fijo() else self.movil().activo
+
+    def fijo(self):
+        return FijoProfile.objects.get(vendedor=self)
+
+    def movil(self):
+        return MovilProfile.objects.get(vendedor=self)
 
 
 class ConsumidorProfile(models.Model):
