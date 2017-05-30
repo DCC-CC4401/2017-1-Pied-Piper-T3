@@ -10,6 +10,9 @@ from django.conf import settings
 class UserType(models.Model):
     type = models.CharField(max_length=15)
 
+    def __str__(self):
+        return self.type
+
 class MyUserManager(BaseUserManager):
     """
     A custom user manager to deal with emails as unique identifiers for auth
@@ -43,7 +46,7 @@ class MyUserManager(BaseUserManager):
 class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True)
     nombre = models.CharField(max_length=100)
-    userType = models.ForeignKey(UserType, on_delete=models.CASCADE)
+    userType = models.ForeignKey(UserType, on_delete=models.CASCADE, default =4)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -96,15 +99,24 @@ class Vendedor(models.Model):
     credito = models.BooleanField()
     junaeb = models.BooleanField()
 
+    def __str__(self):
+        return self.user.__str__()
+
 
 class ConsumidorProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     avatar = models.ImageField(default='almuerzos/static/img/AvatarEstudiante.png')
 
+    def __str__(self):
+        return self.user.__str__()
+
 
 class MovilProfile(models.Model):
     vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
     activo = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.vendedor.__str__()
 
 
 class FijoProfile(models.Model):
@@ -112,17 +124,23 @@ class FijoProfile(models.Model):
     horaIni = models.TimeField()
     horaFin = models.TimeField()
 
+    def __str__(self):
+        return self.vendedor.__str__()
+
+
 
 class Favorito(models.Model):
     consumidor = models.ForeignKey(ConsumidorProfile, on_delete=models.CASCADE)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
 
+class Categoria(models.Model):
+    categoria = models.CharField(max_length=40)
 
 class Productos(models.Model):
     vendedor = models.OneToOneField(Vendedor)
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=200)
-    categoria = models.CharField(max_length=100)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     stock = models.IntegerField(default = 0)
     precio = models.IntegerField(default = 0)
     avatar = models.ImageField(default='almuerzos/static/img/bread.png')
@@ -131,3 +149,5 @@ class Productos(models.Model):
     vendidos = models.IntegerField(default=0)
     enVenta = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.nombre
