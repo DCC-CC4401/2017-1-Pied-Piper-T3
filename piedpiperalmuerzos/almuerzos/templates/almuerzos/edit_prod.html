@@ -4,7 +4,7 @@
 <main>
 <div class="section"></div>
 
-      <h4 class="teal-text" style="text-align: center;">Agregar Item</h4>
+      <h4 class="teal-text" style="text-align: center;">Editar Item</h4>
       <div class="section"></div>
 
       <div class="container">
@@ -19,7 +19,7 @@
               <div class='input-field col s12 m12'>
                   &ensp;Nombre del producto:
                  <div class="input-field inline ">
-                <input placeholder="Pizza" class='validate' type='text' name='nombre' id='nombre' />
+                <input placeholder="Pizza" class='validate' type='text' name='nombre' id='nombre' value="{{ item.nombre }}" />
                 <label style="text-align: center" for='item'></label>
                  </div>
               </div>
@@ -29,7 +29,7 @@
               <div class='input-field col s12 m12'>
                   &ensp;Precio del producto:
                   <div class="input-field inline">
-                <input placeholder="1300" class='validate' type='text' name='precio' id='precio' />
+                <input placeholder="1300" class='validate' type='text' name='precio' id='precio' value="{{ item.precio }}" />
                 <label style="text-align: center" for='precio'></label>
                   </div>
               </div>
@@ -38,7 +38,7 @@
               <div class='input-field col s12 m12'>
                   &ensp;Stock del producto:
                   <div class="input-field inline">
-                <input placeholder="42" class='validate' type='text' name='stock' id='stock' />
+                <input placeholder="42" class='validate' type='text' name='stock' id='stock' value="{{ item.stock }}"/>
                 <label style="text-align: center" for='stock'></label>
                   </div>
               </div>
@@ -50,7 +50,7 @@
                         <select id="categoria" name="categoria">
                             <option value='0' disabled selected>Elige una opción</option>
                             {% for categoria in categorias %}
-                                <option value="{{ categoria.id }}">{{ categoria.categoria }}</option>
+                                <option value="{{ categoria.id }}" {% ifequal item.categoria_id categoria.id%} selected{% endifequal %}>{{ categoria.categoria }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -61,7 +61,7 @@
                   <div class="row">
                     <div class="input-field col s12 m12">
                       <i class="material-icons prefix">&emsp;mode_edit</i>
-                      <textarea id="icon_prefix2" name="descripcion" class="materialize-textarea"></textarea>
+                      <textarea id="icon_prefix2" name="descripcion" class="materialize-textarea" >{{ item.descripcion }}</textarea>
                       <label  for="icon_prefix2">&emsp;Descripción</label>
                     </div>
                   </div>
@@ -71,49 +71,49 @@
               </div>
 
                 <div class="col s12 l6">
-                  <input class="with-gap" name="avatar" type="radio" id="test1" value="bread.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test1" value="bread.png" {% ifequal item.avatar "bread.png" %}checked{% endifequal %}/>
                   <label for="test1"><img style="max-width: 50px;" src="/static/img/bread.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test2" value="breakfast.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test2" value="breakfast.png" {% ifequal item.avatar "breakfast.png" %}checked{% endifequal %}/>
                   <label for="test2"><img style="max-width: 50px;" src="/static/img/breakfast.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test3" value="burger.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test3" value="burger.png" {% ifequal item.avatar "burger.png" %}checked{% endifequal %}/>
                   <label for="test3"><img style="max-width: 50px;" src="/static/img/burger.png" ></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test4" value="chicken.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test4" value="chicken.png" {% ifequal item.avatar "chicken.png" %}checked{% endifequal %}/>
                   <label for="test4"><img style="max-width: 50px;" src="/static/img/chicken.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test5" value="chicken2.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test5" value="chicken2.png" {% ifequal item.avatar "chicken2.png" %}checked{% endifequal %}/>
                   <label for="test5"><img style="max-width: 50px;" src="/static/img/chicken2.png" ></label>
                 </div>
                 <div class="col s12 l6">
-                  <input class="with-gap" name="avatar" type="radio" id="test6" value="chocolate.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test6" value="chocolate.png {% ifequal item.avatar "chocolate.png" %}checked{% endifequal %}"/>
                   <label for="test6"><img style="max-width: 50px;" src="/static/img/chocolate.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test7" value="coke.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test7" value="coke.png" {% ifequal item.avatar "coke.png" %}checked{% endifequal %}/>
                   <label for="test7"><img style="max-width: 50px;" src="/static/img/coke.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test8" value="cupcake.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test8" value="cupcake.png" {% ifequal item.avatar "cupcake.png" %}checked{% endifequal %}/>
                   <label for="test8"><img style="max-width: 50px;" src="/static/img/cupcake.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test9" value="donut.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test9" value="donut.png" {% ifequal item.avatar "donut.png" %}checked{% endifequal %}/>
                   <label for="test9"><img style="max-width: 50px;" src="/static/img/donut.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test10" value="jelly.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test10" value="jelly.png" {% ifequal item.avatar "jelly.png" %}checked{% endifequal %}/>
                   <label for="test10"><img style="max-width: 50px;" src="/static/img/jelly.png"></label>
                 </div>
                 <div class="col s12 l6">
-                  <input class="with-gap" name="avatar" type="radio" id="test11" value="fish.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test11" value="fish.png" {% ifequal item.avatar "fish.png" %}checked{% endifequal %}/>
                   <label for="test11"><img style="max-width: 50px;" src="/static/img/fish.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test12" value="fries.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test12" value="fries.png" {% ifequal item.avatar "fries.png" %}checked{% endifequal %}/>
                   <label for="test12"><img style="max-width: 50px;" src="/static/img/fries.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test13" value="hot-dog.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test13" value="hot-dog.png" {% ifequal item.avatar "hot-dog.png" %}checked{% endifequal %}/>
                   <label for="test13"><img style="max-width: 50px;" src="/static/img/hot-dog.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test14" value="icecream.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test14" value="icecream.png" {% ifequal item.avatar "icecream.png" %}checked{% endifequal %}/>
                   <label for="test14"><img style="max-width: 50px;" src="/static/img/icecream.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test15" value="juice.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test15" value="juice.png" {% ifequal item.avatar "juice.png" %}checked{% endifequal %}/>
                   <label for="test15"><img style="max-width: 50px;" src="/static/img/juice.png"></label>
                 </div>
                 <div class="col s12 l6">
-                  <input class="with-gap" name="avatar" type="radio" id="test16" value="lettuce.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test16" value="lettuce.png" {% ifequal item.avatar "lettuce.png" %}checked{% endifequal %}/>
                   <label for="test16"><img style="max-width: 50px;" src="/static/img/lettuce.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test17" value="pizza.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test17" value="pizza.png" {% ifequal item.avatar "pizza.png" %}checked{% endifequal %}/>
                   <label for="test17"><img style="max-width: 50px;" src="/static/img/pizza.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test18" value="spaguetti.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test18" value="spaguetti.png" {% ifequal item.avatar "spaguetti.png" %}checked{% endifequal %}/>
                   <label for="test18"><img style="max-width: 50px;" src="/static/img/spaguetti.png"></label>
-                  <input class="with-gap" name="avatar" type="radio" id="test19" value="rice.png"/>
+                  <input class="with-gap" name="avatar" type="radio" id="test19" value="rice.png" {% ifequal item.avatar "rice.png" %}checked{% endifequal %}/>
                   <label for="test19"><img style="max-width: 50px;" src="/static/img/rice.png"></label>
 
                 </div>
@@ -142,7 +142,7 @@
                           <p>Arrastre y suelte un archivo aquí o haga click</p>
                           <p class="dropify-error">Sorry, this file is too large</p>
                       </div>
-                      <input type="file" id="input-file-now" class="dropify" data-default-file="" name="foto">
+                      <input type="file" id="input-file-now" class="dropify" name="foto">
                       <button type="button" class="dropify-clear">Remove</button>
                       <div class="dropify-preview"><span class="dropify-render"></span>
                           <div class="dropify-infos">
@@ -157,13 +157,18 @@
                   </div>
               </div>
             </div>
+                <input type="hidden" name="producto_id" id="producto_id" value="{{ item.id }}">
             <div class='row'>
-                    <button type='submit' name='btn_login' class='col s12 m4 l8 btn btn-large waves-effect teal'>Agrega Item</button>
+                    <button type='submit' name='btn_login' class='col s12 m4 l8 btn btn-large waves-effect teal'>Confirmar cambios</button>
                 </div>
           </div>
-
-
           </form>
+        <form class="col s12 m12" method="post" action="/almuerzos/elim_prod/">{% csrf_token %}
+            <input type="hidden" name="producto_id" id="producto_id" value="{{ item.id }}">
+            <div class='row'>
+                    <button type='submit' name='btn_login' class='col s12 m4 l8 btn btn-large waves-effect red'>Eliminar Item</button>
+            </div>
+        </form>
         </div>
       </div>
 

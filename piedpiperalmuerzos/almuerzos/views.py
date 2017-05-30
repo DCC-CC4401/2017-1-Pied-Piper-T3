@@ -256,7 +256,6 @@ def addItem_auth(request):
         user = request.user
         vendedor = Vendedor.objects.get(user_id = user.id)
         form = ProductoForm(request.POST, request.FILES)
-        print(form.is_valid())
         if form.is_valid():
             avatar = request.POST.get('avatar')
             categid = request.POST.get('categoria')
@@ -270,34 +269,48 @@ def addItem_auth(request):
         else:
             return redirect ('/almuerzos/gestion_productos')
     else:
-        return redirect ('almuerzos/gestion_productos')
+        return redirect ('/almuerzos/gestion_productos')
 
 
 
 @login_required
 def edit_prod(request, producto_id=1):
+    item = Productos.objects.get(id=producto_id)
     categorias = Categoria.objects.all()
-    return render(request, 'almuerzos/gestion_productos.html', {'categorias' : categorias})
+    return render(request, 'almuerzos/edit_prod.html', {'categorias' : categorias, 'item' : item, 'idprod' : producto_id})
 
 
 @login_required
 def edit_prod_auth(request):
     if request.method == 'POST':
         user = request.user
-        vendedor = Vendedor.objects.get(user_id = user.id)
-        form = ProductoForm(request.POST, request.FILES)
-        print(form.is_valid())
+        prod_id = request.POST.get('producto_id')
+        prod_id = int(prod_id)
+        producto = Productos.objects.get(id = prod_id)
+        form = ProductoForm(request.POST, request.FILES, instance = producto)
         if form.is_valid():
             avatar = request.POST.get('avatar')
             categid = request.POST.get('categoria')
             categid = int(categid)
             profile = form.save(commit = False)
-            profile.vendedor = vendedor
             profile.avatar = avatar
+            if request.POST.get('foto') != None:
+                profile.foto = request.POST.get('foto')
             profile.categoria = Categoria.objects.get(id=categid)
             profile.save()
             return redirect('/almuerzos/')
         else:
-            return redirect ('/almuerzos/gestion_productos')
+            return redirect ('/almuerzos/gestion_productos/')
     else:
-        return redirect ('almuerzos/gestion_productos')
+        return redirect ('/almuerzos/gestion_productos/')
+
+
+@login_required
+def elim_prod(request):
+    if request.method == 'POST':
+        id = request.POST.get('producto_id')
+        producto = Productos.objects.filter(id=id)
+        producto.delete()
+        return redirect('/almuerzos/')
+    else:
+        return redirect('/almuerzos/')
