@@ -79,7 +79,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def get_user_type(self):
         return self.userType.id
 
-    def vendedor(self):
+    def get_vendedor(self):
         return Vendedor.objects.get(user=self)
 
     def consumidor(self):
@@ -98,7 +98,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.is_movil() or self.is_fijo()
 
     def get_avatar(self):
-        return self.vendedor().avatar if self.is_vendedor() else self.consumidor().avatar
+        return self.get_vendedor().avatar if self.is_vendedor() else self.consumidor().avatar
 
 class Vendedor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -173,7 +173,7 @@ class Productos(models.Model):
     stock = models.IntegerField(default = 0)
     precio = models.IntegerField(default = 0)
     avatar = models.ImageField(default='bread.png')
-    foto = models.ImageField()
+    foto = models.ImageField(default='background4.png')
     #Vendidos sirve para las estadisticas
     vendidos = models.IntegerField(default=0)
     enVenta = models.BooleanField(default=False)
