@@ -5,13 +5,30 @@ from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.urls import reverse
+from django.http import JsonResponse
 
 
 def index(request):
-    return render(request, 'almuerzos/index.html')
+    user = request.user
+    activo = False
+    if not user.is_anonymous() and user.userType.id in [1,2]:
+        v = Vendedor.objects.get(user_id=user.id)
+        try:
+             p = Productos.objects.get(vendedor_id=v.id)
+        except:
+            p = []
+
+        if user.userType.id == 2:
+            c = MovilProfile.objects.get(vendedor_id=v.id)
+            activo = c.activo
+            return render_to_response('almuerzos/vendedor_perfil.html', {'user' : user, 'vendedor' : v, 'activo' : activo, 'productos' : p})
+        if user.userType.id == 1:
+            return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'vendedor' : v, 'activo': activo, 'productos' : p})
+    return render_to_response('almuerzos/index.html', {'user' : user, 'activo' : activo })
 
 
 def base(request):
+
     return render(request, 'almuerzos/base.html')
 
 
@@ -20,7 +37,16 @@ def gestion_productos(request):
 
 
 def vendedor_perfil(request, vendedor_id = 1):
-    return render_to_response('almuerzos/vendedor_perfil.html', {'vendedor' : Vendedor.objects.get(id=vendedor_id)})
+    user = request.user
+    activo = False
+    try:
+        p = Productos.objects.get(vendedor_id=v.id)
+    except:
+        p = []
+    v = Vendedor.objects.get(id=vendedor_id)
+    c = MovilProfile.objects.get(vendedor_id=vendedor_id)
+    activo = c.activo
+    return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'activo' : activo, 'vendedor' : Vendedor.objects.get(id=vendedor_id), 'productos' : p})
 
 
 def signup(request):
@@ -123,6 +149,12 @@ def edit_auth(request):
 
         c = None
         v = None
+        if utype == 3:
+            c = ConsumidorProfile.objects.get(user_id = user.id)
+            if request.POST.get('avatar') != None:
+                c.avatar = request.POST.get('avatar')
+            c.save(update_fields=['avatar'])
+
         if utype == 2:
             v = Vendedor.objects.get(user_id = user.id)
             if request.POST.get('efectivo') != None:
@@ -177,3 +209,23 @@ def edit_auth(request):
             c.save(update_fields=['horaIni', 'horaFin'])
 
             return redirect('/almuerzos/vendedor_perfil/')
+
+
+def ajaxActive(request):
+    act = request.GET.get('activo', None)
+    user = request.user
+    v = Vendedor.objects.get(user_id = user.id)
+    m = MovilProfile.objects.get(vendedor_id=v.id)
+    acti = None
+    if act == 'true':
+        acti = True
+    if act == 'false':
+        acti = False
+    m.activo = acti
+    m.save(update_fields=['activo'])
+    data = {
+        'activacion': MovilProfile.objects.filter(vendedor_id=v.id)[0].activo
+    }
+    if data['activacion']:
+        data['succ'] = 'CheckIn'
+    return JsonResponse(data)

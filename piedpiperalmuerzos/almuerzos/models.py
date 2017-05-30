@@ -118,6 +118,7 @@ class MovilProfile(models.Model):
     def __str__(self):
         return self.vendedor.__str__()
 
+
 class FijoProfile(models.Model):
     vendedor = models.OneToOneField(Vendedor, on_delete=models.CASCADE)
     horaIni = models.TimeField()
@@ -125,6 +126,7 @@ class FijoProfile(models.Model):
 
     def __str__(self):
         return self.vendedor.__str__()
+
 
 
 class Favorito(models.Model):
