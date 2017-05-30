@@ -14,7 +14,7 @@ def index(request):
     if not user.is_anonymous() and user.userType.id in [1,2]:
         v = Vendedor.objects.get(user_id=user.id)
         try:
-             p = Productos.objects.get(vendedor_id=v.id)
+             p = Productos.objects.filter(vendedor_id=v.id)
         except:
             p = []
 
@@ -39,13 +39,16 @@ def gestion_productos(request):
 def vendedor_perfil(request, vendedor_id = 1):
     user = request.user
     activo = False
+    v = Vendedor.objects.get(id=vendedor_id)
     try:
-        p = Productos.objects.get(vendedor_id=v.id)
+        p = Productos.objects.filter(vendedor_id=v.id)
     except:
         p = []
-    v = Vendedor.objects.get(id=vendedor_id)
-    c = MovilProfile.objects.get(vendedor_id=vendedor_id)
-    activo = c.activo
+
+    userType = v.user.userType.id
+    if userType == 2:
+        c = MovilProfile.objects.get(vendedor_id=v.id)
+        activo = c.activo
     return render_to_response('almuerzos/vendedor_perfil.html', {'user': user, 'activo' : activo, 'vendedor' : Vendedor.objects.get(id=vendedor_id), 'productos' : p})
 
 
@@ -133,8 +136,6 @@ def registration(request):
 
 def edit(request):
     return render(request, 'almuerzos/edit.html')
-
-
 
 
 @login_required
@@ -229,3 +230,21 @@ def ajaxActive(request):
     if data['activacion']:
         data['succ'] = 'CheckIn'
     return JsonResponse(data)
+
+
+
+@login_required
+def addItem_auth(request):
+    if request.method == 'POST':
+        user = request.user
+        vendedor = Vendedor.objects.get(user_id = user.id)
+        form = ProductoForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit = False)
+            profile.vendedor = vendedor
+            profile.save()
+            return redirect('/almuerzos/index/')
+        else:
+            return redirect ('/almuerzos/gestion_productos')
+    else:
+        return redirect ('almuerzos/gestion_productos')

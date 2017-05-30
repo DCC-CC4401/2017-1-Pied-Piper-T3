@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^edit/$', views.edit, name='edit'),
     url(r'^edit_auth/$', views.edit_auth, name='edit_auth'),
     url(r'^activeChange/$', views.ajaxActive, name = 'ajaxActive'),
+    url(r'^addItem_auth/$', views.addItem_auth, name='addItem_auth'),
 
 ]
